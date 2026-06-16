@@ -1,14 +1,13 @@
 const express = require('express');
 require('dotenv').config();
 
+const clasesRutas = require('./routes/clases.route.js')
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.json())
 
-app.get('/api/', (req, res) => {
-    res.json({ message: 'Backend funcionando' })
-})
+app.use('/api', clasesRutas )
 
 app.listen(port, () => {
     console.log(`Server on port ${port}`);
