@@ -42,35 +42,45 @@ const infoClase = async (id) => {
 
 // anadirClase
 //  query de sql importada desde queryjs con llamada a pool
-const crearClase = async () => {
+const crearClase = async (titulo, descripcion, fecha, hora_inicio, hora_fin, plazas, entrenador_id) => {
     let conexion
 
     try {
         conexion = await pool.connect()
 
-        const { rows } = await pool.query(query.clasesFull)
+        const { rows } = await pool.query(query.crearClase, [titulo, descripcion, fecha, hora_inicio, hora_fin, plazas, entrenador_id])
 
         return rows
     } catch (error) {
+
         console.log(error)
 
         throw error
     } finally {
-        conexion.release()
+        if (conexion) conexion.release()
     }
 }
 
 // modificarClase
 //  query de sql importada desde queryjs con llamada a pool
 
-const actuClase = async () => {
+const actuClase = async (id, titulo, descripcion, fecha, hora_inicio, hora_fin, plazas, entrenador_id) => {
 
     let conexion
 
     try {
         conexion = await pool.connect()
 
-        const { rows } = await pool.query(query.clasesFull)
+        const { rows } = await pool.query(query.actClase, [
+            titulo,
+            descripcion,
+            fecha,
+            hora_inicio,
+            hora_fin,
+            plazas,
+            entrenador_id,
+            id
+        ])
 
         return rows
     } catch (error) {
@@ -78,33 +88,36 @@ const actuClase = async () => {
 
         throw error
     } finally {
-        conexion.release()
+        if (conexion) conexion.release()
     }
 }
 // eliminar clase
 //  query de sql importada desde queryjs con llamada a pool
 
-const delClase = async () => {
+const eliClase = async (id) => {
     let conexion
+    console.log(id)
     try {
         conexion = await pool.connect()
 
-        const { rows } = await pool.query(query.clasesFull)
+        const { rows } = await pool.query(query.delClase, [id])
+        
+        console.log(rows)
 
-        return rows
+        return rows[0]
     } catch (error) {
         console.log(error)
 
         throw error
     } finally {
-        conexion.release()
+        if (conexion) conexion.release()
     }
 }
 
-module.exports= {
+module.exports = {
     actuClase,
     buscarTodasClases,
     crearClase,
-    delClase,
+    eliClase,
     infoClase
 }

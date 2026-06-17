@@ -1,4 +1,4 @@
-const { buscarTodasClases, infoClase } = require("../models/clases")
+const { buscarTodasClases, infoClase, crearClase, actuClase, eliClase } = require("../models/clases")
 
 const traerTodasLasClasses = async (req, res) => {
     try {
@@ -59,24 +59,106 @@ const informacionClases = async (req, res) => {
 //crear clase
 const anadirClase = async (req, res) => {
     try {
+        const { titulo, descripcion, fecha, hora_inicio, hora_fin, plazas, entrenador_id } = req.body
+
+        const nuevaClases = await crearClase(titulo, descripcion, fecha, hora_inicio, hora_fin, plazas, entrenador_id)
+
+        return res.status(200).json({
+            ok: true,
+            msg: "Clase añadida correctamente",
+            data: nuevaClases[0]
+        })
 
     } catch (error) {
 
+        console.log(error)
+
+        return res.status(500).json({
+            ok: false,
+            msg: "Error al obtener la clase",
+        })
     }
 }
 //modificar clase
 const modificarClase = async (req, res) => {
     try {
+        const { id } = req.params
+
+        const {
+            titulo,
+            descripcion,
+            fecha,
+            hora_inicio,
+            hora_fin,
+            plazas,
+            entrenador_id
+        } = req.body
+
+        const claseActualizada = await actuClase(
+            id,
+            titulo,
+            descripcion,
+            fecha,
+            hora_inicio,
+            hora_fin,
+            plazas,
+            entrenador_id)
+
+        if (claseActualizada.length === 0) {
+
+            return res.status(404).json({
+                ok: false,
+                msg: 'No existe la clase con ese id'
+            })
+        }
+
+        return res.status(200).json({
+            ok: true,
+            msg: 'Clase actualizada correctamente',
+            data: claseActualizada[0]
+        })
 
     } catch (error) {
+        console.log(error)
 
+        return res.status(500).json({
+            ok: false,
+            msg: 'Error al actualizar la clase'
+        })
     }
 }
 //eliminar clase
 const eliminarClase = async (req, res) => {
     try {
+        const { id } = req.params
+        const existeClase = await infoClase(id)
+        
+        const elimclase = await eliClase(id)
+
+        console.log(id, 'entra el id')
+        console.log(elimclase, 'desde eliminar clase')
+
+        if (existeClase.length === 0) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'No existe la clase con ese id'
+            })
+        }
+
+
+        return res.status(200).json({
+            ok: true,
+            msg: "  clase eliminada"
+        })
 
     } catch (error) {
+
+        console.log(error)
+
+        return res.status(500).json({
+            ok: false,
+            msg: 'Error al borrar  la clase'
+        })
 
     }
 }

@@ -7,7 +7,7 @@ CREATE TABLE usuarios (
     nombre VARCHAR(100) NOT NULL,
     email VARCHAR(150) NOT NULL UNIQUE,
     contrasena VARCHAR(255) NOT NULL,
-    rol VARCHAR(50) NOT NULL  CHECK (rol IN ('usuario', 'admin', 'visitante')),
+    rol VARCHAR(50) NOT NULL  CHECK (rol IN ('usuario', 'admin') ) DEFAULT 'usuario',
     fecha_creacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -25,10 +25,13 @@ CREATE TABLE clases (
 CREATE TABLE reservas (
     id SERIAL PRIMARY KEY,
     usuario_id INTEGER NOT NULL REFERENCES usuarios(id),
-    clase_id INTEGER NOT NULL REFERENCES clases(id),
+    clase_id INTEGER NOT NULL,
     estado VARCHAR(30) NOT NULL DEFAULT 'confirmada',
     fecha_reserva TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE (usuario_id, clase_id)
+    UNIQUE (usuario_id, clase_id),
+    FOREIGN KEY (clase_id)
+        REFERENCES clases(id)
+        ON DELETE CASCADE
 );
 
 CREATE TABLE rutinas (
