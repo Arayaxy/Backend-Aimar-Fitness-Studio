@@ -7,6 +7,7 @@ const query = {
 
 // query auth
 
-    registrarUsuarios: 'INSERT INTO usuarios(nombre, email, contrasena ) VALUES ($1, $2, $3 ) RETURNING *'
+    registrarUsuarios: 'INSERT INTO usuarios(nombre, email, contrasena ) VALUES ($1, $2, $3 ) RETURNING id, nombre, email, rol, fecha_creacion',
+    logearUsuarioPorEmail: 'SELECT * FROM usuarios WHERE email = $1'
 }
 module.exports = query

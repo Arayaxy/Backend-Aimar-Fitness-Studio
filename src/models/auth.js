@@ -1,18 +1,17 @@
-const bcrypt = require('bcrypt')
 
 const pool = require('../config/configpool')
 const query = require('./query')
 
 
-const userRegist = () => {
+const userRegist = async (nombre, email, contrasenaHash) => {
 
     let conexion
     try {
         conexion = await pool.connect()
 
-        const { rows } = await pool.query(query.registrarUsuarios)
+        const { rows } = await pool.query(query.registrarUsuarios, [nombre, email, contrasenaHash])
 
-        return rows
+        return rows[0]
 
     } catch (error) {
 
@@ -26,7 +25,28 @@ const userRegist = () => {
 
 }
 
-const userLogin = () =>{
-    
+const usuaLogin = async (email) => {
+    let conexion
+    try {
+        conexion = await pool.connect()
+
+        const { rows } = await pool.query(query.logearUsuarioPorEmail, [email])
+
+        return rows[0]
+
+    } catch (error) {
+
+        console.log(error)
+
+        throw error
+
+    } finally {
+        if (conexion) conexion.release()
+    }
+}
+
+module.exports = {
+    userRegist,
+    usuaLogin
 }
 
