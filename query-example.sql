@@ -65,7 +65,7 @@ CREATE TABLE bonos (
 INSERT INTO usuarios (nombre, email, contrasena, rol)
 VALUES 
 ('Inigo','inigo@prueba.com', 'dhaiodb', 'admin'),
-('Esti', 'esti@prueba.com', 'jsdzj', 'visitante'),
+('Esti', 'esti@prueba.com', 'jsdzj', 'usuario'),
 ('Rafa', 'rafa@prueba.com', 'hsjioskj', 'usuario');
 
 INSERT INTO clases 
