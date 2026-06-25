@@ -133,10 +133,6 @@ const eliminarClase = async (req, res) => {
         const { id } = req.params
         const existeClase = await infoClase(id)
         
-        const elimclase = await eliClase(id)
-
-        console.log(id, 'entra el id')
-        console.log(elimclase, 'desde eliminar clase')
 
         if (existeClase.length === 0) {
             return res.status(404).json({
@@ -144,7 +140,7 @@ const eliminarClase = async (req, res) => {
                 msg: 'No existe la clase con ese id'
             })
         }
-
+const elimclase = await eliClase(id)
 
         return res.status(200).json({
             ok: true,

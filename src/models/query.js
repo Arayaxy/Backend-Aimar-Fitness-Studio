@@ -8,6 +8,14 @@ const query = {
 // query auth
 
     registrarUsuarios: 'INSERT INTO usuarios(nombre, email, contrasena ) VALUES ($1, $2, $3 ) RETURNING id, nombre, email, rol, fecha_creacion',
-    logearUsuarioPorEmail: 'SELECT * FROM usuarios WHERE email = $1'
+    logearUsuarioPorEmail: 'SELECT * FROM usuarios WHERE email = $1',
+
+//reservas usuario 
+    buscarReservas: 'SELECT * FROM reservas WHERE usuario_id=$1',
+    anadirReservas:'INSERT INTO reservas( usuario_id, clase_id) VALUES ($1, $2) RETURNING id, usuario_id, clase_id ',
+    
+    buscarReserva:'SELECT * FROM reservas WHERE id=$1',
+    eliminarReservas: 'DELETE FROM reservas WHERE id =$1  RETURNING *'
+
 }
 module.exports = query
