@@ -11,7 +11,8 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 const whiteList = [
-    ' http://localhost:3000/'
+    'http://localhost:5173/',
+    'https://frontend-aimar-fitness-studio-qxjh-git-develop-proyectsarayax.vercel.app/'
 ]
 app.use(cors({
     origin: whiteList

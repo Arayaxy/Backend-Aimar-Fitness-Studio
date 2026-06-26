@@ -1,7 +1,9 @@
 const express = require('express')
+const router = express.Router()
+
 const { anadirReservasPorId, eliminarReservaPorId, buscarReservasPorIdUsuario, buscarReservaPorId } = require('../controllers/reservas.controller')
 
-const router = express.Router()
+
 
 router.get('/reservas/:usuario_id', buscarReservasPorIdUsuario)
 router.get('/reserva/:id', buscarReservaPorId)
