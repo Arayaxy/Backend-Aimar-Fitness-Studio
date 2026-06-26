@@ -18,7 +18,8 @@ const buscarReservasPorIdUsuario = async (req, res) => {
 
         return res.status(200).json({
             ok: true,
-            msg: 'reservas del usuario obtenidas'
+            msg: 'reservas del usuario obtenidas',
+            data: reservas
         })
 
     } catch (error) {
@@ -33,7 +34,7 @@ const buscarReservasPorIdUsuario = async (req, res) => {
     }
 }
 
-const buscarReservaPorId  = async  (req, res) => {
+const buscarReservaPorId = async (req, res) => {
     try {
         const { id } = req.params
 
@@ -73,17 +74,25 @@ const anadirReservasPorId = async (req, res) => {
         const nuevaReserva = await crearNuevaReserva(usuario_id, clase_id)
 
         return res.status(200).json({
+
             ok: true,
             msg: "reserva añadida correctamente",
             data: nuevaReserva
         })
     } catch (error) {
 
+        if (error.code === '23505') {
+
+            return res.status(409).json({
+                ok: false,
+                msg: 'ya existe una reseva con estos datos'
+            })
+        }
         console.log(error)
 
         return res.status(500).json({
             ok: false,
-            msg: "Error al obtener la reserva",
+            msg: "Error al crear la reserva",
         })
 
     }
@@ -94,7 +103,7 @@ const eliminarReservaPorId = async (req, res) => {
     try {
         const { id } = req.params
 
-       
+
         const existeReserva = await buscarReservasPoridReservas(id)
 
         // const existeClase = await infoClase(id)
@@ -106,7 +115,7 @@ const eliminarReservaPorId = async (req, res) => {
                 msg: 'No existen reserva con ese id'
             })
         }
-      
+
 
         const eliminarReservas = await borrarReserva(id)
 

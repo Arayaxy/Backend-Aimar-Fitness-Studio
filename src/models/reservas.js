@@ -28,9 +28,9 @@ const crearNuevaReserva = async (usuario_id, clase_id) => {
 
         conexion = await pool.connect()
 
-        const { rows } = pool.query(query.anadirReservas, [usuario_id, clase_id])
+        const { rows } = await pool.query(query.anadirReservas, [usuario_id, clase_id])
 
-        return rows
+        return rows[0]
 
     } catch (error) {
 
