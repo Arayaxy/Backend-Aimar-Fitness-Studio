@@ -1,6 +1,12 @@
 const pool = require('../config/configpool')
 const query = require('./query')
 
+/**
+ * Busca las reservas de un usuario.
+ *
+ * @param {number|string} usuario_id - ID del usuario.
+ * @returns {Promise<object[]>} Lista de reservas del usuario.
+ */
 const traerReservasPorId = async (usuario_id) => {
     let conexion
     try {
@@ -22,6 +28,13 @@ const traerReservasPorId = async (usuario_id) => {
     }
 }
 
+/**
+ * Crea una reserva para un usuario y una clase.
+ *
+ * @param {number|string} usuario_id - ID del usuario.
+ * @param {number|string} clase_id - ID de la clase.
+ * @returns {Promise<object>} Reserva creada.
+ */
 const crearNuevaReserva = async (usuario_id, clase_id) => {
     let conexion
     try {
@@ -43,6 +56,12 @@ const crearNuevaReserva = async (usuario_id, clase_id) => {
     }
 }
 
+/**
+ * Elimina una reserva por su ID.
+ *
+ * @param {number|string} id - ID de la reserva.
+ * @returns {Promise<object|undefined>} Reserva eliminada o undefined si no existe.
+ */
 const borrarReserva = async (id) => {
 
     let conexion
@@ -67,6 +86,12 @@ const borrarReserva = async (id) => {
 
 }
 
+/**
+ * Busca una reserva concreta por su ID.
+ *
+ * @param {number|string} id - ID de la reserva.
+ * @returns {Promise<object|undefined>} Reserva encontrada o undefined si no existe.
+ */
 const buscarReservasPoridReservas = async (id) => {
 
     let conexion

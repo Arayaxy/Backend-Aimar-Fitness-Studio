@@ -1,8 +1,14 @@
-// importar expres validator con validationresult (devuelve el objeto con todos los errores traidos de los check )
-// si el objeto tiene error y devuelve el objeto con todos los errores los errores se validan en el middleware
-// si no  hay errors (objeto vacio req res next  ) si no hay ningun erro next
 const { validationResult } = require('express-validator')
 
+/**
+ * Revisa los errores generados por express-validator.
+ * Si hay errores, corta la peticion con status 400; si no, continua.
+ *
+ * @param {import('express').Request} req - Peticion ya validada por checkSchema u otros validadores.
+ * @param {import('express').Response} res - Respuesta HTTP con los errores si existen.
+ * @param {import('express').NextFunction} next - Continua al controlador cuando no hay errores.
+ * @returns {void}
+ */
 const verificarInputs = (req, res, next) => {
     const errores = validationResult(req)
 

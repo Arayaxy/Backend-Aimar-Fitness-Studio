@@ -11,7 +11,7 @@ const query = {
     logearUsuarioPorEmail: 'SELECT * FROM usuarios WHERE email = $1',
 
 //reservas usuario 
-    buscarReservas: 'SELECT * FROM reservas WHERE usuario_id=$1',
+    buscarReservas: 'SELECT reservas.id, reservas.usuario_id, reservas.clase_id, clases.titulo, clases.fecha, clases.hora_inicio, clases.hora_fin FROM reservas INNER JOIN clases ON reservas.clase_id = clases.id WHERE usuario_id = $1',
     anadirReservas:'INSERT INTO reservas( usuario_id, clase_id) VALUES ($1, $2) RETURNING id, usuario_id, clase_id ',
     
     buscarReserva:'SELECT * FROM reservas WHERE id=$1',

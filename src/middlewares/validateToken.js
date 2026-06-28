@@ -1,5 +1,14 @@
 const jwt = require('jsonwebtoken')
 
+/**
+ * Middleware que valida el token JWT enviado en la cabecera Authorization.
+ * Si el token es correcto, guarda los datos del usuario en req.usuario.
+ *
+ * @param {import('express').Request} req - Peticion HTTP con Authorization Bearer.
+ * @param {import('express').Response} res - Respuesta HTTP para errores de autenticacion.
+ * @param {import('express').NextFunction} next - Continua al siguiente middleware.
+ * @returns {void}
+ */
 const verificarToken = (req, res, next) => {
 
     const autorizacion = req.headers.authorization
@@ -8,7 +17,7 @@ const verificarToken = (req, res, next) => {
 
         return res.status(401).json({
             ok: false,
-            msg: 'no se encuentra el token'
+            msg: 'No se ha encontrado el token'
 
         })
     }
@@ -24,7 +33,7 @@ const verificarToken = (req, res, next) => {
 
         return res.status(401).json({
             ok: false,
-            msg: 'Token no valido'
+            msg: 'Token no válido'
             
         })
     }

@@ -1,6 +1,13 @@
 const { infoClase } = require("../models/clases")
 const { traerReservasPorId, crearNuevaReserva, borrarReserva, buscarReservasPoridReservas } = require("../models/reservas")
 
+/**
+ * Busca todas las reservas asociadas a un usuario.
+ *
+ * @param {import('express').Request} req - Peticion con usuario_id en req.params.
+ * @param {import('express').Response} res - Respuesta HTTP con las reservas encontradas.
+ * @returns {Promise<void>}
+ */
 const buscarReservasPorIdUsuario = async (req, res) => {
     try {
         const { usuario_id } = req.params
@@ -11,14 +18,14 @@ const buscarReservasPorIdUsuario = async (req, res) => {
 
             return res.status(404).json({
                 ok: false,
-                msg: 'No existen reservas con ese id'
+                msg: 'No existen reservas con ese ID'
             })
 
         }
 
         return res.status(200).json({
             ok: true,
-            msg: 'reservas del usuario obtenidas',
+            msg: 'Reservas del usuario obtenidas correctamente',
             data: reservas
         })
 
@@ -34,6 +41,13 @@ const buscarReservasPorIdUsuario = async (req, res) => {
     }
 }
 
+/**
+ * Busca una reserva concreta por su ID.
+ *
+ * @param {import('express').Request} req - Peticion con id de reserva en req.params.
+ * @param {import('express').Response} res - Respuesta HTTP con la reserva encontrada.
+ * @returns {Promise<void>}
+ */
 const buscarReservaPorId = async (req, res) => {
     try {
         const { id } = req.params
@@ -44,14 +58,14 @@ const buscarReservaPorId = async (req, res) => {
 
             return res.status(404).json({
                 ok: false,
-                msg: 'No existen reservas con ese id'
+                msg: 'No existen reservas con ese ID'
             })
 
         }
 
         return res.status(200).json({
             ok: true,
-            msg: 'reserva del usuario obtenidas',
+            msg: 'Reserva del usuario obtenida correctamente',
             data: reserva
         })
 
@@ -67,6 +81,13 @@ const buscarReservaPorId = async (req, res) => {
     }
 }
 
+/**
+ * Crea una reserva relacionando un usuario con una clase.
+ *
+ * @param {import('express').Request} req - Peticion con usuario_id y clase_id en req.params.
+ * @param {import('express').Response} res - Respuesta HTTP con la reserva creada.
+ * @returns {Promise<void>}
+ */
 const anadirReservasPorId = async (req, res) => {
     try {
         const { usuario_id, clase_id } = req.params
@@ -76,7 +97,7 @@ const anadirReservasPorId = async (req, res) => {
         return res.status(200).json({
 
             ok: true,
-            msg: "reserva añadida correctamente",
+            msg: "Reserva añadida correctamente",
             data: nuevaReserva
         })
     } catch (error) {
@@ -85,7 +106,7 @@ const anadirReservasPorId = async (req, res) => {
 
             return res.status(409).json({
                 ok: false,
-                msg: 'ya existe una reseva con estos datos'
+                msg: 'Ya existe una reserva con estos datos'
             })
         }
         console.log(error)
@@ -99,20 +120,24 @@ const anadirReservasPorId = async (req, res) => {
 
 }
 
+/**
+ * Elimina una reserva por su ID.
+ *
+ * @param {import('express').Request} req - Peticion con id de reserva en req.params.
+ * @param {import('express').Response} res - Respuesta HTTP con el resultado del borrado.
+ * @returns {Promise<void>}
+ */
 const eliminarReservaPorId = async (req, res) => {
     try {
         const { id } = req.params
 
 
         const existeReserva = await buscarReservasPoridReservas(id)
-
-        // const existeClase = await infoClase(id)
-
         if (!existeReserva) {
 
             return res.status(404).json({
                 ok: false,
-                msg: 'No existen reserva con ese id'
+                msg: 'No existe una reserva con ese ID'
             })
         }
 
@@ -121,14 +146,14 @@ const eliminarReservaPorId = async (req, res) => {
 
         return res.status(200).json({
             ok: true,
-            msg: "reserva eliminada con exito "
+            msg: "Reserva eliminada correctamente"
         })
     } catch (error) {
         console.log(error)
 
         return res.status(500).json({
             ok: false,
-            msg: 'Error al borrar  la reserva'
+            msg: 'Error al borrar la reserva'
         })
     }
 }

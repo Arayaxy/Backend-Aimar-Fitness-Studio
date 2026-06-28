@@ -1,7 +1,11 @@
 const pool = require('../config/configpool')
 const query = require('./query')
-// traer todas las clases funcion async
-// query de sql importabda desde queryjs con llamada a pool
+
+/**
+ * Consulta todas las clases guardadas en la base de datos.
+ *
+ * @returns {Promise<object[]>} Lista de clases.
+ */
 const buscarTodasClases = async () => {
     let conexion
     try {
@@ -21,8 +25,13 @@ const buscarTodasClases = async () => {
         if (conexion) conexion.release()
     }
 }
-// traer clase especifica
-//  query de sql importada desde queryjs con llamada a pool
+
+/**
+ * Busca una clase concreta por su ID.
+ *
+ * @param {number|string} id - ID de la clase.
+ * @returns {Promise<object[]>} Array con la clase encontrada o vacío si no existe.
+ */
 const infoClase = async (id) => {
     let conexion
     try {
@@ -40,8 +49,18 @@ const infoClase = async (id) => {
     }
 }
 
-// anadirClase
-//  query de sql importada desde queryjs con llamada a pool
+/**
+ * Inserta una clase nueva en la base de datos.
+ *
+ * @param {string} titulo - Titulo de la clase.
+ * @param {string} descripcion - Descripcion visible para el usuario.
+ * @param {string} fecha - Fecha de la clase.
+ * @param {string} hora_inicio - Hora de inicio.
+ * @param {string} hora_fin - Hora de fin.
+ * @param {number} plazas - Numero de plazas disponibles.
+ * @param {number} entrenador_id - ID del entrenador asignado.
+ * @returns {Promise<object[]>} Clase creada dentro de un array.
+ */
 const crearClase = async (titulo, descripcion, fecha, hora_inicio, hora_fin, plazas, entrenador_id) => {
     let conexion
 
@@ -61,9 +80,19 @@ const crearClase = async (titulo, descripcion, fecha, hora_inicio, hora_fin, pla
     }
 }
 
-// modificarClase
-//  query de sql importada desde queryjs con llamada a pool
-
+/**
+ * Actualiza los datos de una clase existente.
+ *
+ * @param {number|string} id - ID de la clase a modificar.
+ * @param {string} titulo - Titulo actualizado.
+ * @param {string} descripcion - Descripcion actualizada.
+ * @param {string} fecha - Fecha actualizada.
+ * @param {string} hora_inicio - Hora de inicio actualizada.
+ * @param {string} hora_fin - Hora de fin actualizada.
+ * @param {number} plazas - Plazas actualizadas.
+ * @param {number} entrenador_id - Entrenador actualizado.
+ * @returns {Promise<object[]>} Clase actualizada o array vacío si no existe.
+ */
 const actuClase = async (id, titulo, descripcion, fecha, hora_inicio, hora_fin, plazas, entrenador_id) => {
 
     let conexion
@@ -91,9 +120,13 @@ const actuClase = async (id, titulo, descripcion, fecha, hora_inicio, hora_fin, 
         if (conexion) conexion.release()
     }
 }
-// eliminar clase
-//  query de sql importada desde queryjs con llamada a pool
 
+/**
+ * Elimina una clase por su ID.
+ *
+ * @param {number|string} id - ID de la clase.
+ * @returns {Promise<object|undefined>} Clase eliminada o undefined si no existe.
+ */
 const eliClase = async (id) => {
     let conexion
     console.log(id)

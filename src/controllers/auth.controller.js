@@ -3,30 +3,32 @@ const { userRegist, usuaLogin } = require('../models/auth')
 const generarToken = require('../utils/generarToken')
 
 
-// Login
-
+/**
+ * Inicia sesion con email y contrasena.
+ * Comprueba si el usuario existe, valida la contrasena y devuelve un JWT.
+ *
+ * @param {import('express').Request} req - Peticion con email y contrasena en req.body.
+ * @param {import('express').Response} res - Respuesta HTTP con usuario sin contrasena y token.
+ * @returns {Promise<void>}
+ */
 const logearUsuario = async (req, res) => {
     try {
-        // traer los datos del fromulario
         const { email, contrasena } = req.body
-        // comprobar si existe usuario con ese email
         const usuarioExiste = await usuaLogin(email)
-        // si no existe res credenciales incorrectas
+
         if (!usuarioExiste) {
 
             return res.status(401).json({
                 ok: false,
-                msg: 'credenciales incorrectas'
+                msg: 'Credenciales incorrectas'
 
             })
         }
 
-        //     si extiste  comprueba  la contraseña con la que tienes en la bbdd
         const contrasenaCorrecta = await verificarContrasena(
             contrasena,
             usuarioExiste.contrasena
         )
-        // si no coincide {credenciales incorrectas}
         if (!contrasenaCorrecta) {
 
             return res.status(401).json({
@@ -45,7 +47,7 @@ const logearUsuario = async (req, res) => {
         return res.status(200).json({
 
             ok: true,
-            msg: 'Usuario logeado',
+            msg: 'Usuario autenticado correctamente',
             data: usuarioSinContrasena,
             token
 
@@ -64,19 +66,21 @@ const logearUsuario = async (req, res) => {
     }
 }
 
-
-
-
+/**
+ * Registra un usuario nuevo.
+ * Comprueba que el email no este repetido y guarda la contrasena hasheada.
+ *
+ * @param {import('express').Request} req - Peticion con nombre, email y contrasena en req.body.
+ * @param {import('express').Response} res - Respuesta HTTP con usuario creado y token.
+ * @returns {Promise<void>}
+ */
 const registroUsuarios = async (req, res) => {
-    //   traer los datos del fromulario
     try {
         const { nombre, email, contrasena } = req.body
 
-        // comprrobar si existe usuario con ese email
         const usuarioExiste = await usuaLogin(email)
 
         if (usuarioExiste) {
-            //si existes ya existe usuario res
             return res.status(400).json({
                 ok: false,
                 msg: 'Ya existe un usuario con ese email'
@@ -84,16 +88,13 @@ const registroUsuarios = async (req, res) => {
             })
 
         }
-        // hasear contraseña bcript
         const contrasenaHash = await generarContrasenaHash(contrasena)
-        // crear usuario
         const usuario = await userRegist(nombre, email, contrasenaHash)
-        //  gnerar token (jwt)
         const token = generarToken(usuario)
 
         return res.status(201).json({
             ok: true,
-            msg: 'Usuario añadido',
+            msg: 'Usuario registrado correctamente',
             data: usuario,
             token
         })
@@ -107,7 +108,13 @@ const registroUsuarios = async (req, res) => {
     }
 
 }
-// renovartoken
+/**
+ * Renueva el JWT usando el usuario que ya valido el middleware de token.
+ *
+ * @param {import('express').Request} req - Peticion con req.usuario cargado.
+ * @param {import('express').Response} res - Respuesta HTTP con el token nuevo.
+ * @returns {void}
+ */
 const renovarToken = (req, res) => {
 
     const nuevoToken = generarToken(req.usuario)

@@ -7,52 +7,88 @@ const { checkSchema } = require('express-validator')
 const verificarInputs = require('../middlewares/validateInputs')
 
 
-// insertar array con middlewares check 
-
-
-
+/**
+ * @swagger
+ * /auth/renew:
+ *   get:
+ *     summary: Renueva el token del usuario autenticado.
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Token renovado correctamente.
+ *       401:
+ *         description: Token ausente o no válido.
+ */
 router.get('/auth/renew', verificarToken, renovarToken)
 
+/**
+ * @swagger
+ * /auth/register:
+ *   post:
+ *     summary: Registra un usuario nuevo.
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [nombre, email, contrasena]
+ *             properties:
+ *               nombre:
+ *                 type: string
+ *                 example: Aimar
+ *               email:
+ *                 type: string
+ *                 example: aimar@email.com
+ *               contrasena:
+ *                 type: string
+ *                 example: Password1!
+ *     responses:
+ *       201:
+ *         description: Usuario registrado y token generado.
+ *       400:
+ *         description: Datos inválidos o email ya registrado.
+ *       500:
+ *         description: Error interno del servidor.
+ */
 router.post('/auth/register', checkSchema({
 
     nombre: {
-        //elimina los espacios de los lados
         trim: true,
 
         notEmpty: {
-            errorMessage: 'El campo nombre esta vacio '
+            errorMessage: 'El campo nombre está vacío'
         },
         isLength: {
             options: { min: 2, max: 20 },
-            errorMessage: 'supera lo caracteres maximos o minimos'
+            errorMessage: 'El nombre debe tener entre 2 y 20 caracteres'
         },
-        //incluimos validacion regx
         matches: {
             options: [/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s'-]+$/],
             errorMessage: 'El campo nombre no admite esos caracteres'
         },
 
-        //escape evita  la inyeccion de html
         escape: true
     },
     email: {
-        //elimina los espacios de los lados
         trim: true,
 
         notEmpty: {
-            errorMessage: 'El campo email esta vacio '
+            errorMessage: 'El campo email está vacío'
         },
         isEmail: {
             errorMessage: 'El formato del correo no es correcto'
         },
-        //escape evita  la inyeccion de html
         escape: true
 
     },
     contrasena: {
         trim: true,
         notEmpty: {
-            errorMessage: 'El campo contraseña esta vacio '
+            errorMessage: 'El campo contraseña está vacío'
         },
         isStrongPassword: {
             options: {
@@ -70,28 +106,53 @@ router.post('/auth/register', checkSchema({
 
 }, ['body']), verificarInputs, registroUsuarios)
 
+/**
+ * @swagger
+ * /auth/login:
+ *   post:
+ *     summary: Inicia sesión con email y contraseña.
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [email, contrasena]
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: aimar@email.com
+ *               contrasena:
+ *                 type: string
+ *                 example: Password1!
+ *     responses:
+ *       200:
+ *         description: Usuario autenticado y token generado.
+ *       400:
+ *         description: Datos inválidos.
+ *       401:
+ *         description: Credenciales incorrectas.
+ *       500:
+ *         description: Error interno del servidor.
+ */
 router.post('/auth/login', checkSchema({
 
     email: {
-        //elimina los espacios de los lados
         trim: true,
         notEmpty: {
-            errorMessage: 'El campo email esta vacio '
+            errorMessage: 'El campo email está vacío'
         },
         isEmail: {
             errorMessage: 'El formato del correo no es correcto'
         },
-
-
-        //escape evita  la inyeccion de html objetivo principal es prevenir ataques XSS (Cross-Site Scripting),
         escape: true
     },
     contrasena: {
         trim: true,
         notEmpty: {
-            errorMessage: 'El campo contraseña esta vacio '
+            errorMessage: 'El campo contraseña está vacío'
         },
-// errorMessage: 'las credenciales no son correctas'
     }
 
 }, ['body']), verificarInputs, logearUsuario)
