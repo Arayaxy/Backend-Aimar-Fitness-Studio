@@ -41,6 +41,7 @@ const swaggerOptions = {
 
 const whiteList = [
     'http://localhost:5173',
+    'http://localhost:5174',
     'https://frontend-aimar-fitness-studio-qxjh-git-develop-proyectsarayax.vercel.app',
     process.env.FRONTEND_URL
 ].filter(Boolean).map((origin) => origin.replace(/\/$/, ''))
@@ -59,7 +60,7 @@ app.use(cors({
             return callback(null, true)
         }
 
-        return callback(new Error('Not allowed by CORS'))
+        return callback(new Error('no permitidas CORS'))
     }
 }))
 
